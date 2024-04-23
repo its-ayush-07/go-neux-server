@@ -96,8 +96,8 @@ func SignUp(c *gin.Context) {
 
 	go sendEmail(user.Email, user.UserName)
 
-	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", user.Token, 3600*24*30, "", "", false, true)
+	c.SetSameSite(http.SameSiteNoneMode)
+	c.SetCookie("Authorization", user.Token, 3600*24*30, "", "localhost", false, true)
 	c.JSON(200, models.User{ID: user.ID, Email: user.Email, UserName: user.UserName, CreatedAt: user.CreatedAt, UpdatedAt: user.UpdatedAt})
 }
 
@@ -126,14 +126,14 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", newToken, 3600*24*30, "", "", false, true)
+	c.SetSameSite(http.SameSiteNoneMode)
+	c.SetCookie("Authorization", newToken, 3600*24*30, "", "localhost", false, true)
 	c.JSON(200, models.User{ID: founduser.ID, Email: founduser.Email, UserName: founduser.UserName, CreatedAt: founduser.CreatedAt, UpdatedAt: founduser.UpdatedAt})
 }
 
 // Function to logout
 func Logout(c *gin.Context) {
-	c.SetCookie("Authorization", "", -1, "", "", false, true)
+	c.SetCookie("Authorization", "", -1, "", "localhost", false, true)
 	c.JSON(200, gin.H{"message": "Authorization cookie cleared and logged out"})
 }
 
